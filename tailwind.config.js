@@ -2,7 +2,9 @@
 module.exports = {
   content: ['./views/**/*.{html,js,ejs}'],
   theme: {
-    extend: {},
+    extend: {backgroundImage: {
+      'hero': "url('warehouse.jpg')", 
+    }},
   },
   plugins: [require("daisyui")],
 }
