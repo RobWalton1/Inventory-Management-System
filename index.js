@@ -35,14 +35,27 @@ app.get('index', (req, res) => {
     res.render('index');
 });
 
-
 app.get('/home', (req, res) => {
     res.render('home');
+});
+
+app.get('/addProducts', (req, res) => {
+    res.render('addProducts');
+});
+
+app.get('/deleteProducts', (req, res) => {
+    res.render('deleteProducts');
+});
+
+app.get('/search', (req, res) => {
+    res.render('search');
 });
 
 app.listen(port, () => {
   console.log('server running on port 3000');
 });
+
+
 
 //Creating a pool
 const createPool = mysql.createPool({
