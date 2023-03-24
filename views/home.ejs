@@ -9,6 +9,18 @@
 </head>
 <body class="bg-hero min-h-screen bg-cover bg-no-repeat">
     <%- include('templates/navigation'); %>
+    <div class="display=flex place-content-center">
+      <div class="stats shadow">
+      <% for (let i = 0; i < products.length; i++) { %>
+        <div class="stat place-items-center">
+          <div class="stat-title text-white text-2xl"><%= products[i].productName %></div>
+          <div class="stat-desc text-white text-base">Stock level:</div>
+          <div class="stat-value"><%= products[i].Quantity %></div>
+          <div class="stat-desc text-red-600 text-base">This item is low on stock</div>
+        </div>
+        <% } %>  
+        </div>
+      </div>
 
 </body>
 

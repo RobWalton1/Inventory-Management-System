@@ -9,8 +9,17 @@
 </head>
 <body class="bg-hero min-h-screen bg-cover bg-no-repeat">
     <%- include('templates/navigation'); %>
-    <h1>Search for a product</h1>
+    <div class="hero min-h-screen">
+        <div class="hero-content flex-col lg:flex-row  backdrop-blur-2xl ">
+            <form action="/search" method="POST">
+                <input name = "searchTerm" type="number" id="'searchTerm" placeholder="Product ID" class="input input-bordered w-full max-w-xs" required />
+                <button class="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg" type="submit">Submit</button>
+            </form>
+            <form action="/searchName" method="POST">
+                <input name = "searchTerm" type="text" id="'searchTerm" placeholder="Name" class="input input-bordered w-full max-w-xs" required />
+                <button class="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg" type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
 </body>
-
-
 </html>

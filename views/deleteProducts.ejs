@@ -11,7 +11,11 @@
     <%- include('templates/navigation'); %>
     <div class="hero min-h-screen">
         <div class="hero-content flex-col lg:flex-row  backdrop-blur-2xl ">
-            <p>This is where the magic will happen</p>
+            <h1>Delete product by ID</h1>
+            <form action="/delete-ID" method="POST">
+                <input name = "searchTerm" type="number" id="'searchTerm" placeholder="Product ID" class="input input-bordered w-full max-w-xs" required />
+                <button class="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg" type="submit">Submit</button>
+            </form>
         </div>
     </div>
 
