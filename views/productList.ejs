@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Link to tailwind and daisyui style sheet-->
+    <link rel="stylesheet" href="/styles/style.css">
+    <title>Product list</title>
+</head>
+<body class="bg-hero min-h-screen bg-cover bg-no-repeat">
+    <%- include('templates/navigation'); %>
+    <div class="overflow-x-auto">
+        <table class="table table-compact w-full">
+          <thead>
+            <tr>
+              <th>ID</th> 
+              <th>Name</th> 
+              <th>Description</th> 
+              <th>Quantity</th> 
+              <th>Location</th> 
+              <th>Price</th>
+            </tr>
+          </thead> 
+          <tbody>
+            <% for (let i = 0; i < products.length; i++) { %>
+            <tr> 
+              <td><%= products[i].ID %></td> 
+              <td><%= products[i].productName %></td> 
+              <td><%= products[i].Description %></td> 
+              <td><%= products[i].Quantity %></td> 
+              <td><%= products[i].Location %></td> 
+              <td><%= products[i].Price %></td>
+            </tr>
+            <% } %>
+</body>
+</html>

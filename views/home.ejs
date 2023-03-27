@@ -9,7 +9,7 @@
 </head>
 <body class="bg-hero min-h-screen bg-cover bg-no-repeat">
     <%- include('templates/navigation'); %>
-    <div class="display=flex place-content-center">
+    <div class="flex justify-center w-full items-center h-screen">
       <div class="stats shadow">
       <% for (let i = 0; i < products.length; i++) { %>
         <div class="stat place-items-center">
@@ -21,8 +21,5 @@
         <% } %>  
         </div>
       </div>
-
 </body>
-
-
 </html>

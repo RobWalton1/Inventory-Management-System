@@ -42,6 +42,13 @@ app.get('/home', (req, res) => {
       });
 });
 
+app.get('/productList', (req, res) => {
+    connection.query('SELECT * FROM productstable ORDER BY ID', function(error, results, fields) {
+        if (error) throw error;
+        res.render('productList', { products: results });
+    });
+});
+
 app.get('/addProducts', (req, res) => {
     res.render('addProducts');
 });
