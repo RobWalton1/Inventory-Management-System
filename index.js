@@ -35,6 +35,10 @@ app.get('index', (req, res) => {
     res.render('index');
 });
 
+app.get('/orderInput', (req, res) => {
+    res.render('orderInput');
+});
+
 //Selecting the top 3 products that are low on quantity
 app.get('/home', (req, res) => {
     connection.query('SELECT * FROM productstable ORDER BY Quantity ASC LIMIT 3 OFFSET 0', function(error, results, fields) {
@@ -70,6 +74,10 @@ app.get('/login', (req, res) => {
     res.render('login');
 });
 
+app.get('/incomingModify', (req, res) => {
+    res.render('incomingModify');
+});
+
 app.listen(port, () => {
   console.log('server running on port 3000');
 });
@@ -87,6 +95,36 @@ const createPool = mysql.createPool({
 
 //Login form submission
 //app.post('/loginform', (req, res) => {
+
+//Modifying the quantity of a product by ID (Subtracting)
+app.post('/outgoingModify', (req, res) => {
+    const ID = req.body.ID;
+    const Quantity = req.body.Quantity;
+  
+    // update the quantity column for the given ID
+    const sql = `UPDATE productstable SET Quantity = Quantity - ${Quantity} WHERE ID = ${ID}`;
+    connection.query(sql, (err, result) => {
+      if (err) throw err;
+      console.log(`${result.affectedRows} row(s) updated`);
+      res.redirect('/orderInput');
+      console.log('Order updated');
+    });
+  });
+
+  //Modifying the quantity of a product by ID (Adding)
+app.post('/incomingModify', (req, res) => {
+    const ID = req.body.ID;
+    const Quantity = req.body.Quantity;
+  
+    // update the quantity column for the given ID
+    const sql = `UPDATE productstable SET Quantity = Quantity + ${Quantity} WHERE ID = ${ID}`;
+    connection.query(sql, (err, result) => {
+      if (err) throw err;
+      console.log(`${result.affectedRows} row(s) updated`);
+      res.redirect('/orderInput');
+      console.log('Order updated');
+    });
+  });
 
 //form submission to add products
 app.post('/submit-form', (req, res) => {

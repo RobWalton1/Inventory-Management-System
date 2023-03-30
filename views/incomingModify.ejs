@@ -1,0 +1,21 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Link to tailwind and daisyui style sheet-->
+    <link rel="stylesheet" href="/styles/style.css">
+    <title>Incoming orders</title>
+</head>
+<body class="bg-hero min-h-screen bg-cover bg-no-repeat">
+    <%- include('templates/navigation'); %>
+    <div class="flex justify-center w-full items-center h-screen">
+        <form action="/incomingModify" method="POST">
+            <input name = "ID" type="number" placeholder="Product ID" class="input input-bordered w-full max-w-xs" required />
+            <br>
+            <input name = "Quantity" type="number" placeholder="Quantity" class="input input-bordered w-full max-w-xs" required />
+            <br>
+            <button class="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg" type="submit">Submit</button>
+        </form>
+      </div>
+</body>
+</html>
