@@ -4,6 +4,7 @@ const ejs = require('ejs');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const path = require("path");
+const session = require('express-session');
 
 const port = 3000;
 
@@ -65,6 +66,10 @@ app.get('/searchResults', (req, res) => {
     res.render('searchResults');
 });
 
+app.get('/login', (req, res) => {
+    res.render('login');
+});
+
 app.listen(port, () => {
   console.log('server running on port 3000');
 });
@@ -80,6 +85,8 @@ const createPool = mysql.createPool({
     database: 'products'
 });
 
+//Login form submission
+//app.post('/loginform', (req, res) => {
 
 //form submission to add products
 app.post('/submit-form', (req, res) => {
