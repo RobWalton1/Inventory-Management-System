@@ -39,13 +39,17 @@ app.get('/orderInput', (req, res) => {
     res.render('orderInput');
 });
 
-//Selecting the top 3 products that are low on quantity
+//Selecting the top 3 products that are low on quantity and provide current value of stock within the warehouse
 app.get('/home', (req, res) => {
     connection.query('SELECT * FROM productstable ORDER BY Quantity ASC LIMIT 3 OFFSET 0', function(error, results, fields) {
         if (error) throw error;
-        res.render('home', { products: results });
-      });
+        connection.query('SELECT SUM(Quantity * Price) AS total FROM productstable', function(error, price, fields) {
+            if (error) throw error;
+            res.render('home', { products: results, total: price[0].total });
+        });
+    });
 });
+
 
 app.get('/productList', (req, res) => {
     connection.query('SELECT * FROM productstable ORDER BY ID', function(error, results, fields) {
@@ -154,7 +158,13 @@ app.post('/search', (req, res) => {
 
 
 //Deleting a product by ID, contains parameterized query to prevent SQL injection
-
+app.post('/delete-ID', function(req, res) {
+    var id = req.body.searchTerm;
+    connection.query('DELETE FROM productstable WHERE ID = ?', [id], function(error, results, fields) {
+      if (error) throw error;
+      res.redirect('/deleteProducts');
+    });
+  });
 
 
 
