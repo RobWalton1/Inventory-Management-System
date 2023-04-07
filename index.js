@@ -21,10 +21,28 @@ const connection = mysql.createConnection({
     database: 'products'
 });
 
+const Userconnection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'password',
+    database: 'users'
+  });
+
 connection.connect((err) => {
     if (err) throw err;
-    console.log('Connected!');
+    console.log('Product table Connected!');
 });
+
+Userconnection.connect((err) => {
+    if (err) throw err;
+    console.log('User table Connected!');
+});
+
+app.use(session({
+  secret: 'secretKey',
+  resave: false,
+  saveUninitialized: true
+}));
 
 //Routes
 app.get('/', (req, res) => {
@@ -52,7 +70,7 @@ app.get('/home', (req, res) => {
 
 
 app.get('/productList', (req, res) => {
-    connection.query('SELECT * FROM productstable ORDER BY ID', function(error, results, fields) {
+    connection.query('SELECT * FROM productstable ORDER BY productName', function(error, results, fields) {
         if (error) throw error;
         res.render('productList', { products: results });
     });
@@ -85,8 +103,6 @@ app.get('/incomingModify', (req, res) => {
 app.listen(port, () => {
   console.log('server running on port 3000');
 });
-
-
 
 //Creating a pool
 const createPool = mysql.createPool({
@@ -166,5 +182,21 @@ app.post('/delete-ID', function(req, res) {
     });
   });
 
+//Login form submission
+app.post('/loginform', (req, res) => {
+    const { username, password } = req.body;
+    Userconnection.query('SELECT * FROM usersanpasswords WHERE username = ? AND password = ?', [username, password], (error, results, fields) => {
+      if (error) throw error;
+      if (results.length > 0) {
+        res.send('Login successful!');
+        req.session.loggedin = true;
+        req.session.username = username;
+        res.redirect('/home');
+      } else {
+        res.send('Incorrect username or password.');
+      }
+    });
+  });
+  
 
 
