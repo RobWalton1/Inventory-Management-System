@@ -185,18 +185,18 @@ app.post('/delete-ID', function(req, res) {
 //Login form submission
 app.post('/loginform', (req, res) => {
     const { username, password } = req.body;
-    Userconnection.query('SELECT * FROM usersanpasswords WHERE username = ? AND password = ?', [username, password], (error, results, fields) => {
-      if (error) throw error;
-      if (results.length > 0) {
-        res.send('Login successful!');
-        req.session.loggedin = true;
-        req.session.username = username;
-        res.redirect('/home');
-      } else {
-        res.send('Incorrect username or password.');
-      }
+    Userconnection.query('SELECT * FROM userpass WHERE username = ? AND password = ?', [username, password], (error, results, fields) => {
+        if (error) throw error;
+        if (results.length > 0) {
+            req.session.loggedin = true;
+            req.session.username = username;
+            res.redirect('/home');
+        } else {
+            res.send('Incorrect username or password.');
+        }
     });
-  });
+});
+
   
 
 
