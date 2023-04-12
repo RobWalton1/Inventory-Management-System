@@ -54,42 +54,75 @@ app.get('index', (req, res) => {
 });
 
 app.get('/orderInput', (req, res) => {
+    if (req.session.loggedin) {
     res.render('orderInput');
+    }
+    else{
+        res.render("/login")
+    }
 });
 
 //Selecting the top 3 products that are low on quantity and provide current value of stock within the warehouse
 app.get('/home', (req, res) => {
+    if (req.session.loggedin) {
     connection.query('SELECT * FROM productstable ORDER BY Quantity ASC LIMIT 3 OFFSET 0', function(error, results, fields) {
         if (error) throw error;
         connection.query('SELECT SUM(Quantity * Price) AS total FROM productstable', function(error, price, fields) {
             if (error) throw error;
-            res.render('home', { products: results, total: price[0].total });
+            res.render('home', { products: results, total: price[0].total, req: req });
         });
     });
+}
+    else{res.render("login")}
 });
 
 
 app.get('/productList', (req, res) => {
+    if (req.session.loggedin) {
     connection.query('SELECT * FROM productstable ORDER BY productName', function(error, results, fields) {
         if (error) throw error;
         res.render('productList', { products: results });
     });
+}
+    else{
+        res.render("login")
+    }
 });
 
 app.get('/addProducts', (req, res) => {
+    if (req.session.loggedin) {
     res.render('addProducts');
+    }
+    else{
+        res.redirect("login")
+    }
 });
 
 app.get('/deleteProducts', (req, res) => {
-    res.render('deleteProducts');
+    if (req.session.loggedin) {
+        res.render('deleteProducts');
+        }
+        else{
+            res.render("login")
+        }
 });
 
 app.get('/search', (req, res) => {
-    res.render('search');
+    if (req.session.loggedin) {
+        res.render('search');
+        }
+        else{
+            res.render("login")
+        }
 });
 
 app.get('/searchResults', (req, res) => {
+    if (req.session.loggedin) {
     res.render('searchResults');
+    }
+    else{
+        res.render("login")
+    }
 });
 
 app.get('/login', (req, res) => {
@@ -97,7 +130,18 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/incomingModify', (req, res) => {
+    if (req.session.loggedin) {
     res.render('incomingModify');
+    }
+    else{
+        res.render("login")
+    }
+});
+
+app.get('/signOut', (req, res) => {
+    req.session.loggedin = false;
+    req.session.admin= false;
+    res.render('login');
 });
 
 app.listen(port, () => {
@@ -189,14 +233,13 @@ app.post('/loginform', (req, res) => {
         if (error) throw error;
         if (results.length > 0) {
             req.session.loggedin = true;
-            req.session.username = username;
+            if (username == 'admin'){
+                req.session.admin= true;
+                console.log("Admin working")
+            }
             res.redirect('/home');
         } else {
-            res.send('Incorrect username or password.');
+            res.send("Rip")
         }
     });
 });
-
-  
-
-
