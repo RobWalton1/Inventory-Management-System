@@ -8,7 +8,7 @@
     <title>Product list</title>
 </head>
 <body class="bg-hero min-h-screen bg-cover bg-no-repeat">
-    <%- include('templates/navigation'); %>
+  <%- include('templates/navigation', { req: req }); %>
     <div class="overflow-x-auto">
         <table class="table table-compact w-full">
           <thead>

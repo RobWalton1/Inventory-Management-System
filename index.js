@@ -49,13 +49,23 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
+app.get('/register', (req, res) => {
+    if (req.session.loggedin) {
+    res.render('register', {req: req});
+    }
+    else{
+        res.render("/login")
+    }
+});
+
+
 app.get('index', (req, res) => {
     res.render('index');
 });
 
 app.get('/orderInput', (req, res) => {
     if (req.session.loggedin) {
-    res.render('orderInput');
+    res.render('orderInput', {req: req});
     }
     else{
         res.render("/login")
@@ -81,7 +91,7 @@ app.get('/productList', (req, res) => {
     if (req.session.loggedin) {
     connection.query('SELECT * FROM productstable ORDER BY productName', function(error, results, fields) {
         if (error) throw error;
-        res.render('productList', { products: results });
+        res.render('productList', { products: results, req: req });
     });
 }
     else{
@@ -91,7 +101,7 @@ app.get('/productList', (req, res) => {
 
 app.get('/addProducts', (req, res) => {
     if (req.session.loggedin) {
-    res.render('addProducts');
+    res.render('addProducts', {req: req});
     }
     else{
         res.redirect("login")
@@ -100,7 +110,7 @@ app.get('/addProducts', (req, res) => {
 
 app.get('/deleteProducts', (req, res) => {
     if (req.session.loggedin) {
-        res.render('deleteProducts');
+        res.render('deleteProducts', {req: req});
         }
         else{
             res.render("login")
@@ -109,7 +119,7 @@ app.get('/deleteProducts', (req, res) => {
 
 app.get('/search', (req, res) => {
     if (req.session.loggedin) {
-        res.render('search');
+        res.render('search', {req: req});
         }
         else{
             res.render("login")
@@ -118,7 +128,7 @@ app.get('/search', (req, res) => {
 
 app.get('/searchResults', (req, res) => {
     if (req.session.loggedin) {
-    res.render('searchResults');
+    res.render('searchResults', {req: req});
     }
     else{
         res.render("login")
@@ -126,12 +136,12 @@ app.get('/searchResults', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-    res.render('login');
+    res.render('login', {req: req});
 });
 
 app.get('/incomingModify', (req, res) => {
     if (req.session.loggedin) {
-    res.render('incomingModify');
+    res.render('incomingModify', {req: req});
     }
     else{
         res.render("login")
@@ -157,9 +167,6 @@ const createPool = mysql.createPool({
     database: 'products'
 });
 
-//Login form submission
-//app.post('/loginform', (req, res) => {
-
 //Modifying the quantity of a product by ID (Subtracting)
 app.post('/outgoingModify', (req, res) => {
     const ID = req.body.ID;
@@ -179,7 +186,6 @@ app.post('/outgoingModify', (req, res) => {
 app.post('/incomingModify', (req, res) => {
     const ID = req.body.ID;
     const Quantity = req.body.Quantity;
-  
     // update the quantity column for the given ID
     const sql = `UPDATE productstable SET Quantity = Quantity + ${Quantity} WHERE ID = ${ID}`;
     connection.query(sql, (err, result) => {
@@ -200,6 +206,20 @@ app.post('/submit-form', (req, res) => {
         } else {
             console.log(results);
             res.redirect('/addProducts');
+        }
+    });
+});
+
+//Registering a new user
+app.post('/registerform', (req, res) => {
+    const { username, password } = req.body;
+    Userconnection.query('INSERT INTO userpass (username, password) VALUES (?, ?)', [username, password], (err, results) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Username and/or password in use');
+        } else {
+            console.log(results);
+            res.redirect('/home');
         }
     });
 });

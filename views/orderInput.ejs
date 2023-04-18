@@ -8,7 +8,7 @@
     <title>Outgoing orders</title>
 </head>
 <body class="bg-hero min-h-screen bg-cover bg-no-repeat">
-    <%- include('templates/navigation'); %>
+    <%- include('templates/navigation', { req: req }); %>
     <div class="flex justify-center w-full items-center h-screen">
         <div class="hero-content flex-col lg:flex-row  backdrop-blur-2xl ">
         <form action="/outgoingModify" method="POST">
