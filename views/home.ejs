@@ -27,16 +27,18 @@
             <div class="stat-value">£<%= total %></div>
           </div>
           <!--Automatic reordering (Only avaliable to admin)-->
+          <% if (req.session.admin === true) { %>
           <div class="card w-96 bg-base-100 shadow-xl image-full">
-            <figure><img src="/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" /></figure>
+            <figure><img src="https://pilbox.themuse.com/image.jpg?filter=antialias&h=385&opt=1&pos=top-left&prog=1&q=keep&url=https%3A%2F%2Fcms-assets.themuse.com%2Fmedia%2Flead%2F01212022-1047259374-coding-classes_scanrail.jpg&w=700" alt="Shoes" /></figure>
             <div class="card-body">
-              <h2 class="card-title">Shoes!</h2>
-              <p>If a dog chews shoes whose shoes does he choose?</p>
+              <h2 class="card-title">Automatic reordering</h2>
+              <p>Enable/Disable automatic reordering and change threshold</p>
               <div class="card-actions justify-end">
                 <button class="btn btn-primary">Buy Now</button>
               </div>
             </div>
           </div>
+          <% } %>
           
         </div>
       </div>

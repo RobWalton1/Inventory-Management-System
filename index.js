@@ -171,10 +171,11 @@ const createPool = mysql.createPool({
 app.post('/outgoingModify', (req, res) => {
     const ID = req.body.ID;
     const Quantity = req.body.Quantity;
-  
+    const username = usernamesave;
     // update the quantity column for the given ID
-    const sql = `UPDATE productstable SET Quantity = Quantity - ${Quantity} WHERE ID = ${ID}`;
-    connection.query(sql, (err, result) => {
+    const sql = `UPDATE productstable SET Quantity = Quantity - ?, username = ?, dateadded = CURRENT_TIMESTAMP WHERE ID = ?`;
+    const values = [Quantity, username, ID];
+    connection.query(sql, values, (err, result) => {
       if (err) throw err;
       console.log(`${result.affectedRows} row(s) updated`);
       res.redirect('/orderInput');
@@ -183,23 +184,27 @@ app.post('/outgoingModify', (req, res) => {
   });
 
   //Modifying the quantity of a product by ID (Adding)
-app.post('/incomingModify', (req, res) => {
+  app.post('/incomingModify', (req, res) => {
     const ID = req.body.ID;
     const Quantity = req.body.Quantity;
-    // update the quantity column for the given ID
-    const sql = `UPDATE productstable SET Quantity = Quantity + ${Quantity} WHERE ID = ${ID}`;
-    connection.query(sql, (err, result) => {
+    const username = usernamesave;
+    // update the quantity column, username, and dateadded for the given ID
+    const sql = `UPDATE productstable SET Quantity = Quantity + ?, username = ?, dateadded = CURRENT_TIMESTAMP WHERE ID = ?`;
+    const values = [Quantity, username, ID];
+    connection.query(sql, values, (err, result) => {
       if (err) throw err;
       console.log(`${result.affectedRows} row(s) updated`);
       res.redirect('/orderInput');
       console.log('Order updated');
     });
   });
+  
 
 //form submission to add products
 app.post('/submit-form', (req, res) => {
-    const { ID, productName, Description, Quantity, Location, Price } = req.body;
-    createPool.query('INSERT INTO productstable (ID, productName, Description, Quantity, Location, Price) VALUES (?, ?, ?, ?, ?, ?)', [ID, productName, Description, Quantity, Location, Price || 1], (err, results) => {
+    const {productName, Description, Quantity, Location, Price } = req.body;
+    const username = usernamesave;
+    createPool.query('INSERT INTO productstable (productName, Description, Quantity, Location, Price, username) VALUES (?, ?, ?, ?, ?, ?)', [productName, Description, Quantity, Location, Price || 1, username], (err, results) => {
         if (err) {
             console.error(err);
             res.status(500).send('Product ID in use');
@@ -231,8 +236,20 @@ app.post('/search', (req, res) => {
     connection.query(searchQuery, [searchTerm], (error, results, fields) => {
       if (error) throw error;
       console.log('Rendering searchResults.ejs file');
-      res.render('searchResults', { results });
+      res.render('searchResults', { results, req });
 
+    });
+  });
+
+
+//Searching for a product by Name, contains parameterized query to prevent SQL injection
+app.post('/searchName', (req, res) => {
+    const searchTerm = req.body.searchTerm;
+    const searchQuery = 'SELECT * FROM productstable WHERE productName = ?';
+    connection.query(searchQuery, [searchTerm], (error, results, fields) => {
+      if (error) throw error;
+      console.log('Rendering searchResults.ejs file');
+      res.render('searchResults', { results, req });
     });
   });
 
@@ -246,9 +263,12 @@ app.post('/delete-ID', function(req, res) {
     });
   });
 
+var usernamesave;
+
 //Login form submission
 app.post('/loginform', (req, res) => {
     const { username, password } = req.body;
+    usernamesave = username;
     Userconnection.query('SELECT * FROM userpass WHERE username = ? AND password = ?', [username, password], (error, results, fields) => {
         if (error) throw error;
         if (results.length > 0) {
@@ -263,3 +283,4 @@ app.post('/loginform', (req, res) => {
         }
     });
 });
+

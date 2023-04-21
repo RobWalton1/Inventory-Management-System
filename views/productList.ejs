@@ -19,6 +19,8 @@
               <th>Quantity</th> 
               <th>Zone</th> 
               <th>Price</th>
+              <th>Date added</th>
+              <th>Last Edited by</th>
             </tr>
           </thead> 
           <tbody>
@@ -30,6 +32,8 @@
               <td><%= products[i].Quantity %></td> 
               <td><%= products[i].Location %></td> 
               <td>£<%= products[i].Price %></td>
+              <td><%= products[i].DateAdded %></td>
+              <td><%= products[i].username %></td>
             </tr>
             <% } %>
 </body>
