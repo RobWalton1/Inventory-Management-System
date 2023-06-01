@@ -195,7 +195,7 @@ page.post('/incomingModify', (req, res) => {
     Productsconnection.query(sql, values, (err, result) => {
       if (err) throw err;
       console.log(`${result.affectedRows} row(s) updated`);
-      res.redirect('/orderInput');
+      res.redirect('/incomingModify');
       console.log('Order updated');
     });
   });

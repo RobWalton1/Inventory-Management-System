@@ -3,7 +3,7 @@ const index = require('../index.js');
 const test = require('supertest');
 
 describe('Test to check if data can be uploaded', () => {
-    it ('Should login with correct details', function(done){
+    it ('Data should be added too the database', function(done){
         const productName = 'test' 
         const Description = 'test'
         const Quantity = '1'
@@ -18,7 +18,7 @@ describe('Test to check if data can be uploaded', () => {
                 done(err);
             } else {
                 //Submit form method will return to add procucts page if the data is entered correctly so only headers need to be checked
-                assert.equal(res.headers.location, '/addProducts');
+                assert.equal(res.headers.location, '/incomingModify');
                 done();
             }
         });
